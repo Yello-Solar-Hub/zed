@@ -148,7 +148,7 @@ Images are hosted externally. Reference format:
 
 ### Good: Direct and actionable
 
-```
+```bash
 To format on save, open the Settings Editor (`Cmd+,`) and search for `format_on_save`. Set it to `on`.
 
 Or add this to your settings.json:
@@ -159,13 +159,13 @@ Or add this to your settings.json:
 
 ### Bad: Wordy and promotional
 
-```
+```bash
 Zed provides a powerful and seamless formatting experience. Simply navigate to the settings and you'll find the format_on_save option which enables Zed's incredible auto-formatting capabilities.
 ```
 
 ### Good: Honest about limitations
 
-```
+```bash
 Zed doesn't index your project like IntelliJ does. You open a folder and start working immediately—no waiting. The trade-off: cross-project analysis relies on language servers, which may not go as deep.
 
 **How to adapt:**
@@ -175,7 +175,7 @@ Zed doesn't index your project like IntelliJ does. You open a folder and start w
 
 ### Bad: Defensive or dismissive
 
-```
+```bash
 While some users might miss indexing, Zed's approach is actually better because it's faster.
 ```
 

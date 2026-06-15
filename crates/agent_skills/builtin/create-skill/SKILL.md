@@ -15,9 +15,9 @@ A skill is a reusable set of instructions that an agent can load on demand. Each
 
 Skills can be placed in two locations:
 
-| Scope | Path | When to use |
-|-------|------|-------------|
-| Global | `~/.agents/skills/<skill-name>/SKILL.md` | Personal skills, available in all projects |
+| Scope         | Path                                             | When to use                                                                |
+| ------------- | ------------------------------------------------ | -------------------------------------------------------------------------- |
+| Global        | `~/.agents/skills/<skill-name>/SKILL.md`         | Personal skills, available in all projects                                 |
 | Project-local | `<project>/.agents/skills/<skill-name>/SKILL.md` | Project-specific skills, shared with collaborators through version control |
 
 Prefer project-local when the skill is specific to a repository. Prefer global when the skill is a personal workflow the user wants everywhere.
@@ -50,6 +50,7 @@ what to do when this skill is activated.
 ## Naming Rules
 
 The skill name must:
+
 - Be lowercase letters and numbers only, with single hyphens as separators
 - Not start or end with `-`
 - Not contain consecutive `--`
@@ -73,7 +74,7 @@ The body of the SKILL.md (after the frontmatter) contains the instructions the a
 
 A skill directory can contain additional files beyond `SKILL.md`:
 
-```
+```bash
 ~/.agents/skills/react-component/
 ├── SKILL.md
 ├── templates/
