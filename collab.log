@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.06s
+     Running `target\debug\collab.exe serve all`
+error: process didn't exit successfully: `target\debug\collab.exe serve all` (exit code: 101)

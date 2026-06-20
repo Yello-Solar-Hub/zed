@@ -69,4 +69,23 @@
     "**/.settings",
   ],
   "read_only_files": ["**/.rustup/**", "**/.cargo/registry/**", "**/.cargo/git/**", "target/**/*.rs", "**/*.lock"],
+  "language_models": {
+    "openai": {
+      "api_url": "http://127.0.0.1:4002/v1",
+      "available_models": [
+        { "name": "deepseek-chat", "max_tokens": 128000 },
+        { "name": "gpt-4o", "max_tokens": 128000 },
+        { "name": "gemini-flash", "max_tokens": 128000 },
+        { "name": "llama-3-70b-groq", "max_tokens": 128000 },
+        { "name": "qwen-coder", "max_tokens": 128000 }
+      ]
+    }
+  },
+  "assistant": {
+    "default_model": {
+      "provider": "openai",
+      "model": "deepseek-chat"
+    },
+    "version": "2"
+  }
 }
