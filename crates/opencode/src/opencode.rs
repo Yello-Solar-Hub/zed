@@ -162,6 +162,14 @@ pub enum Model {
     #[serde(rename = "qwen3.7-max")]
     Qwen3_7Max,
 
+    // -- Mistral models --
+    #[serde(rename = "mistral-large-latest")]
+    MistralLargeLatest,
+    #[serde(rename = "mistral-small-latest")]
+    MistralSmallLatest,
+    #[serde(rename = "codestral-latest")]
+    CodestralLatest,
+
     // -- Custom model --
     #[serde(rename = "custom")]
     Custom {
@@ -220,6 +228,11 @@ impl Model {
             // Free models
             Self::Nemotron3UltraFree | Self::BigPickle | Self::MiniMaxM3Free => {
                 &[OpenCodeSubscription::Free]
+            }
+
+            // Mistral models
+            Self::MistralLargeLatest | Self::MistralSmallLatest | Self::CodestralLatest => {
+                &[OpenCodeSubscription::Zen, OpenCodeSubscription::Go]
             }
 
             // Custom models get their subscription from settings, not from here
@@ -284,6 +297,10 @@ impl Model {
             Self::Nemotron3UltraFree => "nemotron-3-ultra-free",
             Self::MiniMaxM3Free => "minimax-m3-free",
 
+            Self::MistralLargeLatest => "mistral-large-latest",
+            Self::MistralSmallLatest => "mistral-small-latest",
+            Self::CodestralLatest => "codestral-latest",
+
             Self::Custom { name, .. } => name,
         }
     }
@@ -341,6 +358,10 @@ impl Model {
             Self::BigPickle => "Big Pickle",
             Self::Nemotron3UltraFree => "Nemotron 3 Ultra Free",
             Self::MiniMaxM3Free => "MiniMax M3 Free",
+
+            Self::MistralLargeLatest => "Mistral Large",
+            Self::MistralSmallLatest => "Mistral Small",
+            Self::CodestralLatest => "Codestral",
 
             Self::Custom {
                 name, display_name, ..
@@ -406,7 +427,10 @@ impl Model {
             | Self::DeepSeekV4Pro
             | Self::DeepSeekV4Flash
             | Self::BigPickle
-            | Self::Nemotron3UltraFree => ApiProtocol::OpenAiChat,
+            | Self::Nemotron3UltraFree
+            | Self::MistralLargeLatest
+            | Self::MistralSmallLatest
+            | Self::CodestralLatest => ApiProtocol::OpenAiChat,
 
             Self::Custom { protocol, .. } => *protocol,
         }
@@ -492,6 +516,9 @@ impl Model {
             Self::Nemotron3UltraFree => 1_000_000,
             Self::DeepSeekV4Pro | Self::DeepSeekV4Flash => 1_000_000,
 
+            Self::MistralLargeLatest | Self::MistralSmallLatest => 256_000,
+            Self::CodestralLatest => 128_000,
+
             Self::Custom { max_tokens, .. } => *max_tokens,
         }
     }
@@ -556,6 +583,9 @@ impl Model {
             Self::DeepSeekV4Pro | Self::DeepSeekV4Flash => Some(384_000),
             Self::Nemotron3UltraFree => Some(128_000),
             Self::MimoV2_5Pro | Self::MimoV2_5 => Some(128_000),
+
+            Self::MistralLargeLatest | Self::MistralSmallLatest => Some(131_072),
+            Self::CodestralLatest => Some(65_536),
 
             Self::Custom {
                 max_output_tokens, ..
@@ -625,7 +655,10 @@ impl Model {
             | Self::DeepSeekV4Flash
             | Self::Qwen3_7Max
             | Self::BigPickle
-            | Self::Nemotron3UltraFree => false,
+            | Self::Nemotron3UltraFree
+            | Self::CodestralLatest => false,
+
+            Self::MistralLargeLatest | Self::MistralSmallLatest => true,
 
             Self::Custom { protocol, .. } => matches!(
                 protocol,
@@ -725,5 +758,31 @@ pub async fn stream_generate_content(
             response.status(),
             text
         ))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_mistral_models() {
+        let large = Model::MistralLargeLatest;
+        assert_eq!(large.id(), "mistral-large-latest");
+        assert_eq!(large.display_name(), "Mistral Large");
+        assert_eq!(large.protocol(OpenCodeSubscription::Zen), ApiProtocol::OpenAiChat);
+        assert_eq!(large.max_token_count(OpenCodeSubscription::Zen), 256_000);
+        assert_eq!(large.max_output_tokens(OpenCodeSubscription::Zen), Some(131_072));
+        assert!(large.supports_tools());
+        assert!(large.supports_images());
+
+        let codestral = Model::CodestralLatest;
+        assert_eq!(codestral.id(), "codestral-latest");
+        assert_eq!(codestral.display_name(), "Codestral");
+        assert_eq!(codestral.protocol(OpenCodeSubscription::Go), ApiProtocol::OpenAiChat);
+        assert_eq!(codestral.max_token_count(OpenCodeSubscription::Go), 128_000);
+        assert_eq!(codestral.max_output_tokens(OpenCodeSubscription::Go), Some(65_536));
+        assert!(codestral.supports_tools());
+        assert!(!codestral.supports_images());
     }
 }
